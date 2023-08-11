@@ -12,7 +12,7 @@ const SideContainer: React.FC<SideContainerProps> = ({
   categories,
 }) => {
   return (
-    <div className="w-1/3 flex flex-col gap-3 h-auto ">
+    <div className="basis-1/3 flex flex-col gap-3 h-auto ">
       <SelectStatus />
       <SelectCollection selectValue={collections} />
       <SelectCategory categories={categories} />

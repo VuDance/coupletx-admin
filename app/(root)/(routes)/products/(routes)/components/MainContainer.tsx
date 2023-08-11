@@ -12,7 +12,7 @@ interface ProductTextFieldProps {
 
 const MainContainer: React.FC<ProductTextFieldProps> = ({ control }) => {
   return (
-    <div className=" w-2/3 flex flex-col gap-3">
+    <div className=" basis-2/3 flex flex-col gap-3">
       <div className="bg-[#fff] flex flex-col gap-2 rounded-lg p-3 shadow-md">
         <ProductTextField
           id="product_name"

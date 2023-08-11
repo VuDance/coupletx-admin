@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const token = request.headers.get("authorization");
-    const { image, name, gender, slug } = body;
+    const { id, image, name, gender, slug } = body;
 
     const decodedToken: any = await jwt.verify(
       token || "",
@@ -18,7 +18,10 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-    await prisma.category.create({
+    await prisma.category.update({
+      where: {
+        id,
+      },
       data: {
         name,
         image,
@@ -27,7 +30,7 @@ export async function POST(request: NextRequest) {
       },
     });
     return NextResponse.json({
-      message: "Created category",
+      message: "Updated category",
       success: true,
     });
   } catch (error: any) {

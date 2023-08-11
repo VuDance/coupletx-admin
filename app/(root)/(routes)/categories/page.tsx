@@ -4,7 +4,7 @@ import Container from "./components/Container";
 const page = async () => {
   const res = await fetch(`${process.env.MY_URL}/api/categories/find`, {
     mode: "cors",
-    // cache: "no-store",
+    cache: "no-store",
   });
   const data = await res.json();
   return (

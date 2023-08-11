@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const token = request.headers.get("authorization");
-    const { image, name, gender, slug } = body;
+    const { category_id, image, name, slug } = body;
 
     const decodedToken: any = await jwt.verify(
       token || "",
@@ -18,16 +18,16 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-    await prisma.category.create({
+    await prisma.subCategory.create({
       data: {
         name,
         image,
-        gender,
         slug,
+        category_id,
       },
     });
     return NextResponse.json({
-      message: "Created category",
+      message: "Created sub category",
       success: true,
     });
   } catch (error: any) {

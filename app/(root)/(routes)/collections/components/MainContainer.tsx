@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 const MainContainer = () => {
   const { control } = useFormContext();
   return (
-    <div className="bg-[#fff] flex flex-col gap-2 rounded-lg p-3 shadow-md w-2/3">
+    <div className="bg-[#fff] flex flex-col flex-1 gap-2 rounded-lg p-3 shadow-md w-2/3">
       <ProductTextField
         label="Tiêu đề"
         id="name"

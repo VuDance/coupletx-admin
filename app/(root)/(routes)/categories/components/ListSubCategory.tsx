@@ -1,12 +1,68 @@
-import { Category } from "@prisma/client";
-import React from "react";
+"use client";
+
+import { SubCategory } from "@prisma/client";
+import React, { useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import ModalSubCategory from "./ModalSubCategory";
 
 interface ListCategoriesProps {
-  data: Category[];
+  data: SubCategory[];
+  category_id: any;
 }
 
-const ListSubCategory = () => {
-  return <div>ListSubCategory</div>;
+const ListSubCategory: React.FC<ListCategoriesProps> = ({
+  data,
+  category_id,
+}) => {
+  const [open, setOpen] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+
+  const [dataModal, setDataModal] = useState<SubCategory>();
+
+  return (
+    <div className="flex-1 p-3">
+      <ModalSubCategory
+        category_id={category_id}
+        action="create"
+        open={open}
+        handleClose={() => setOpen(false)}
+      />
+      <ModalSubCategory
+        data={dataModal}
+        action="edit"
+        open={openEditModal}
+        handleClose={() => setOpenEditModal(false)}
+      />
+      {data.length > 0 ? (
+        data.map((item) => (
+          <div
+            key={item.id}
+            className="`border flex justify-between items-center p-2 cursor-pointer"
+          >
+            <p>{item.name}</p>
+            <p
+              className=" underline cursor-pointer "
+              onClick={() => {
+                setDataModal(item);
+                setOpenEditModal(true);
+              }}
+            >
+              Chỉnh sửa
+            </p>
+          </div>
+        ))
+      ) : (
+        <p className="p-2 w-full text-center">Không có danh mục con nào</p>
+      )}
+      <div
+        onClick={() => setOpen(true)}
+        className=" underline text-black flex gap-1 cursor-pointer hover:opacity-70 font-semibold"
+      >
+        <AddIcon />
+        <p>Thêm dach mục sản phẩm</p>
+      </div>
+    </div>
+  );
 };
 
 export default ListSubCategory;

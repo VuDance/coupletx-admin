@@ -4,7 +4,7 @@ import { Category, SubCategory } from "@prisma/client";
 import React, { useState } from "react";
 import ListItem from "./ListItem";
 import AddIcon from "@mui/icons-material/Add";
-import ModalCreateCategory from "./ModalCreateCategory";
+import ModalCategory from "./ModalCategory";
 
 interface ListCategoriesProps {
   data: Category[];
@@ -13,14 +13,39 @@ interface ListCategoriesProps {
 
 const ListCategories: React.FC<ListCategoriesProps> = ({ data, onChange }) => {
   const [open, setOpen] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [dataModal, setDataModal] = useState();
+
   const handleCloseModal = () => {
     setOpen(false);
   };
+  const handleSetDataModal = (data: any) => {
+    setDataModal(data);
+  };
 
   return (
-    <div>
-      <ModalCreateCategory open={open} handleClose={handleCloseModal} />
-      {data && data.length > 0 && <ListItem />}
+    <div className="p-3 flex-1">
+      <ModalCategory
+        action="create"
+        open={open}
+        handleClose={handleCloseModal}
+      />
+      <ModalCategory
+        action="edit"
+        data={dataModal}
+        open={openEditModal}
+        handleClose={() => setOpenEditModal(false)}
+      />
+      {data &&
+        data.length > 0 &&
+        data.map((item: any) => (
+          <ListItem
+            handleOpenModalEdit={() => setOpenEditModal(true)}
+            setDataModal={handleSetDataModal}
+            data={item}
+            key={item.id}
+          />
+        ))}
       <div
         onClick={() => setOpen(true)}
         className=" underline text-black flex gap-1 cursor-pointer hover:opacity-70 font-semibold"
