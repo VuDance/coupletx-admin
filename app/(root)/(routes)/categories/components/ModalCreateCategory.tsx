@@ -28,25 +28,26 @@ const ModalCreateCategory: React.FC<ModalCreateCategoryProps> = ({
     },
   });
   const handleSubmitData = async (data: any) => {
-    try {
-      const res = await axios.post(`/api/collections/create`, data, {
-        headers: {
-          authorization: session.data.accessToken,
-        },
-      });
-      console.log(res);
-      if (res.data.errorType === "Authorization") {
-        toast.error(res.data.error);
-      } else if (res.data.errorType === "TokenExpired") {
-        toast.error(res.data.error);
-        signOut();
-      } else toast.success(res.data.message);
-      handleClose();
-    } catch (error: any) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    console.log(session);
+    // try {
+    //   const res = await axios.post(`/api/categories/create`, data, {
+    //     headers: {
+    //       authorization: session.data.accessToken,
+    //     },
+    //   });
+    //   console.log(res);
+    //   if (res.data.errorType === "Authorization") {
+    //     toast.error(res.data.error);
+    //   } else if (res.data.errorType === "TokenExpired") {
+    //     toast.error(res.data.error);
+    //     signOut();
+    //   } else toast.success(res.data.message);
+    //   handleClose();
+    // } catch (error: any) {
+    //   console.error(error);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
   return (
     <FormProvider {...method}>
