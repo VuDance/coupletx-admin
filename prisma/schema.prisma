@@ -1,0 +1,257 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+model Category {
+  id           Int           @id @default(autoincrement())
+  name         String 
+  gender       String
+  image        String
+  subcategories SubCategory[]
+  products     Product[]
+}
+
+model SubCategory {
+  id           Int         @id @default(autoincrement())
+  name         String
+  image        String
+  category_id  Int
+  products     Product[]
+  category     Category  @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@index([category_id])
+}
+
+model Product {
+  id                Int       @id @default(autoincrement())
+  product_name      String
+  category_id       Int
+  subcategory_id    Int
+  collection_id     Int?
+  favorite_counters Int
+  product_references        String @db.VarChar(1000)
+  information       String @db.VarChar(1000)
+  created_at        DateTime
+  gender         String
+  rates            Rate[]
+  productVariants  ProductsVariant[]
+  collection Collections? @relation(fields: [collection_id], references: [id], onDelete: Cascade)
+  category          Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  sub_category      SubCategory @relation(fields: [subcategory_id], references: [id], onDelete: Cascade)
+
+  @@index([category_id])
+  @@index([subcategory_id])
+  @@index([collection_id])
+}
+
+model ProductsVariant {
+  id                  Int       @id @default(autoincrement())
+  product_variant_name String
+  product_id           Int
+  price                Float
+  color                String
+  quantity             Int
+  size              Size[]
+  images            ProductVariantImage[]
+  order_item        OrderItem[]
+  cart_item         CartItem[]
+  product           Product   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([product_id])
+}
+
+model Size {
+  id                    Int       @id @default(autoincrement())
+  name_size             String
+  product_variant_id    Int
+  technical_specification TechnicalSpecification[]
+  product_variant        ProductsVariant @relation(fields: [product_variant_id], references: [id], onDelete: Cascade)
+
+  @@index([product_variant_id])
+}
+
+model TechnicalSpecification {
+  id                             Int       @id @default(autoincrement())
+  name_technical_specification   String
+  value                          Float
+  size_id                        Int
+  size                           Size      @relation(fields: [size_id], references: [id], onDelete: Cascade)
+
+  @@index([size_id])
+}
+
+model ProductVariantImage {
+  id                   Int       @id @default(autoincrement())
+  imageUrl             String
+  product_variant_id   Int
+  productVariant       ProductsVariant @relation(fields: [product_variant_id], references: [id], onDelete: Cascade)
+
+  @@index([product_variant_id])
+}
+
+
+model Collections{
+  id Int      @id @default(autoincrement())
+  name String
+  image String
+  description String  @db.VarChar(1000)
+  status Int
+  product Product[]
+}
+
+
+model Rate {
+  id         Int      @id @default(autoincrement())
+  title      String
+  description String  @db.VarChar(1000)
+  star       Float
+  product_id Int
+  user_id    String
+  created_at DateTime @default(now())
+  user   User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  images RateImage[]
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([product_id])
+}
+
+model RateImage{
+  id      Int      @id @default(autoincrement())  
+  imageUrl String
+  rate_id  Int
+  rate     Rate     @relation(fields: [rate_id], references: [id], onDelete: Cascade)
+
+  @@index([rate_id])
+}
+
+
+
+model Order {
+  id             Int      @id @default(autoincrement())
+  user_id        String
+  total_price    Float
+  full_name String
+  phone_number String
+  address        String
+  payment_method String
+  created_at     DateTime @default(now())
+  order_item OrderItem[]
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model OrderItem {
+  id                  Int      @id @default(autoincrement())
+  order_id            Int
+  product_variant_id  Int
+  quantity            Int
+  total_price         Float
+  product_variant     ProductsVariant @relation(fields: [product_variant_id], references: [id], onDelete: Cascade)
+  order               Order           @relation(fields: [order_id], references: [id], onDelete: Cascade)
+
+  @@index([product_variant_id])
+  @@index([order_id])
+}
+
+model Cart {
+  id      Int      @id @default(autoincrement())
+  user_id String
+  cart_item CartItem[]
+  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model CartItem {
+  id                  Int      @id @default(autoincrement())
+  product_variant_id  Int
+  total_price         Float
+  cart_id             Int
+  quantity            Int
+  size String
+  color String
+
+  product_variant     ProductsVariant @relation(fields: [product_variant_id], references: [id], onDelete: Cascade)
+  cart                Cart            @relation(fields: [cart_id], references: [id], onDelete: Cascade)
+
+  @@index([product_variant_id])
+  @@index([cart_id])
+}
+
+model Blogs {
+  id        Int      @id @default(autoincrement())
+  title     String
+  user_id   String
+  image     String
+  created_at DateTime @default(now())
+  posts Posts[]
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model User {
+  id            String       @id @default(cuid()) @unique
+  name String
+  email String @unique
+  password String?
+  gender        String? 
+  image           String?
+  isAdmin Boolean
+  emailVerified   DateTime?
+  active Boolean @default(false)
+  verify_token String?
+  verify_token_expired DateTime?
+  reset_password_token String?
+  reset_password_token_expired DateTime?
+  date_of_birth DateTime? @default(now())
+  orders Order[]
+  carts  Cart[]
+  accounts      Account[]
+  blogs  Blogs[]
+  posts  Posts[]
+  reviews Rate[]
+}
+model Account {
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? @db.VarChar(1000)
+    access_token      String? @db.VarChar(1000)
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String?  @db.VarChar(2000)
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@index([userId])
+}
+
+model Posts {
+  id         Int      @id @default(autoincrement())
+  title      String
+  author_id  String
+  created_at DateTime @default(now())
+  body String @db.VarChar(5000)
+  blog_id Int
+  image String
+  user User  @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  blog Blogs @relation(fields: [blog_id], references: [id], onDelete: Cascade)
+
+  @@index([author_id])
+  @@index([blog_id])
+}
