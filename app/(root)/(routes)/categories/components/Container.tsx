@@ -21,12 +21,14 @@ const Container: React.FC<ContainerProps> = ({ data }) => {
     setSubCategories(list);
   }, []);
   useEffect(() => {
-    const subCate: any = data.find(
-      (item: any) => item.slug === param?.get("category")
-    );
-    if (subCate) {
-      setCategoryId(subCate.id);
-      setSubCategories(subCate.subcategories);
+    if (data) {
+      const subCate: any = data.find(
+        (item: any) => item.slug === param?.get("category")
+      );
+      if (subCate) {
+        setCategoryId(subCate.id);
+        setSubCategories(subCate.subcategories);
+      }
     }
   }, [data, param]);
 

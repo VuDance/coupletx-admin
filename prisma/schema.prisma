@@ -16,8 +16,12 @@ model Category {
   gender       String
   image        String
   slug String
+  collection_id Int?
   subcategories SubCategory[]
   products     Product[]
+   collection Collections? @relation(fields: [collection_id], references: [id], onDelete: Cascade)
+
+  @@index([collection_id])
 }
 
 model SubCategory {
@@ -107,6 +111,7 @@ model Collections{
   description String  @db.VarChar(1000)
   status Int
   product Product[]
+  categories Category[]
 }
 
 

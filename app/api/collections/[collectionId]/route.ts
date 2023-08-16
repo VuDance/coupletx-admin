@@ -10,6 +10,10 @@ export async function GET(
       where: {
         id: parseInt(params.collectionId),
       },
+      include: {
+        product: true,
+        categories: true,
+      },
     });
     if (!collection) {
       return NextResponse.json({ collection: null });

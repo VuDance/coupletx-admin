@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
       const collections = await prisma.collections.findMany({
         include: {
           product: true,
+          categories: true,
         },
         where: {
           name: {
@@ -22,6 +23,7 @@ export async function GET(request: NextRequest) {
       const collections = await prisma.collections.findMany({
         include: {
           product: true,
+          categories: true,
         },
       });
       return NextResponse.json({

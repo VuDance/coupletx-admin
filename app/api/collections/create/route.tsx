@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const token = request.headers.get("authorization");
-    const { description, image, name, status } = body;
+    const { description, image, name, status, categories } = body;
 
     const decodedToken: any = await jwt.verify(
       token || "",
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await prisma.collections.create({
+    const collection = await prisma.collections.create({
       data: {
         name,
         description: description,
@@ -27,6 +27,19 @@ export async function POST(request: NextRequest) {
         status,
       },
     });
+    if (collection) {
+      await prisma.category.updateMany({
+        where: {
+          name: {
+            in: categories,
+          },
+        },
+        data: {
+          collection_id: collection.id,
+        },
+      });
+    }
+
     return NextResponse.json({
       message: "Created collection",
       success: true,

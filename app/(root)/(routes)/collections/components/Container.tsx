@@ -9,22 +9,28 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { Category } from "@prisma/client";
 
 interface ContainerProps {
   data?: any;
   action: string;
+  categories: Category[];
 }
 
-const Container: React.FC<ContainerProps> = ({ data, action }) => {
+const Container: React.FC<ContainerProps> = ({ data, action, categories }) => {
   const [loading, setLoading] = useState(false);
   const userData: any = useSession();
   const router = useRouter();
+  // console.log(data.categories[0].name);
   const methods = useForm({
     defaultValues: {
       name: data ? data.name : "",
       image: data ? data.image : "",
       description: data ? data.description : "",
       status: data ? parseInt(data.status) : 1,
+      categories: data
+        ? data.categories.map((item: Category) => item.name)
+        : [],
     },
   });
 
@@ -53,8 +59,6 @@ const Container: React.FC<ContainerProps> = ({ data, action }) => {
       setLoading(true);
       let res = null;
       if (action === "create") {
-        // console.log(userData.data.accessToken);
-
         res = await axios.post(`/api/collections/${action}`, convertData, {
           headers: {
             authorization: userData.data.accessToken,
@@ -63,16 +67,24 @@ const Container: React.FC<ContainerProps> = ({ data, action }) => {
       } else {
         res = await axios.put(`/api/collections/${action}`, convertData);
       }
-      toast.success(res.data.message);
-      router.push("/collections");
+
+      if (res.data.errorType === "Authorization") {
+        toast.error(res.data.error);
+      } else if (res.data.errorType === "TokenExpired") {
+        console.log("eheel");
+        toast.error(res.data.error);
+        signOut();
+      } else {
+        toast.success(res.data.message);
+        router.push("/collections");
+        router.refresh();
+      }
     } catch (error: any) {
-      if (error.errorType === "Authorization") {
-        toast.error(error.message);
-      } else if (error.errorType === "TokenExpired") {
-        toast.error(error.message);
+      if (error.response.data.errorType === "TokenExpired") {
+        toast.error(error.response.data.error);
         signOut();
       }
-      console.error(error);
+      console.error(error.response.data.errorType);
     } finally {
       setLoading(false);
     }
@@ -83,7 +95,7 @@ const Container: React.FC<ContainerProps> = ({ data, action }) => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
           <div className="flex gap-3 w-full items-start">
-            <MainContainer />
+            <MainContainer categories={categories} />
             <SideContainer />
           </div>
           <div className="w-full flex justify-end mt-3 items-end">

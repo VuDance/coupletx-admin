@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
         name,
         image,
         slug,
-        category_id,
+        category_id: parseInt(category_id),
       },
     });
     return NextResponse.json({

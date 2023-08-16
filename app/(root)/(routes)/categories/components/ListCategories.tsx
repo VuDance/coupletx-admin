@@ -24,7 +24,7 @@ const ListCategories: React.FC<ListCategoriesProps> = ({ data, onChange }) => {
   };
 
   return (
-    <div className="p-3 flex-1">
+    <div className="p-3 flex flex-col gap-2 flex-1">
       <ModalCategory
         action="create"
         open={open}

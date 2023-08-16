@@ -79,9 +79,14 @@ const ModalSubCategory: React.FC<ModalSubCategoryProps> = ({
           className="w-1/3 flex flex-col gap-2 p-2 h-auto bg-white rounded-xl"
         >
           <p>
-            {action === "create"
-              ? "Tạo danh mục con"
-              : `Chỉnh sửa danh mục ${data?.name} `}
+            {action === "create" ? (
+              "Tạo danh mục con"
+            ) : (
+              <p>
+                Chỉnh sửa danh mục{" "}
+                <span className=" font-semibold">{data?.name}</span>
+              </p>
+            )}
           </p>
           <InputForm label="Tên danh mục" id="name" />
           <InputForm label="Slug" id="slug" slug />
