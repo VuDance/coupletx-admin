@@ -18,6 +18,20 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
+    const exitedCategory = await prisma.category.findMany({
+      where: {
+        OR: [{ name }, { slug }],
+      },
+    });
+    if (exitedCategory.length > 0) {
+      return NextResponse.json(
+        {
+          message:
+            "Đã có danh mục với tên và giới tính vừa nhập. Vui lòng nhập với 1 dữ liệu khác",
+        },
+        { status: 409 }
+      );
+    }
     await prisma.category.create({
       data: {
         name,

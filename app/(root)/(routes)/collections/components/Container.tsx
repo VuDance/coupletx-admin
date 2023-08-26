@@ -67,22 +67,17 @@ const Container: React.FC<ContainerProps> = ({ data, action, categories }) => {
       } else {
         res = await axios.put(`/api/collections/${action}`, convertData);
       }
-
-      if (res.data.errorType === "Authorization") {
-        toast.error(res.data.error);
-      } else if (res.data.errorType === "TokenExpired") {
-        console.log("eheel");
-        toast.error(res.data.error);
-        signOut();
-      } else {
-        toast.success(res.data.message);
-        router.push("/collections");
-        router.refresh();
-      }
+      toast.success(res.data.message);
+      router.refresh();
     } catch (error: any) {
+      if (error.response.data.errorType === "Authorization") {
+        toast.error(error.response.data.error);
+      }
       if (error.response.data.errorType === "TokenExpired") {
         toast.error(error.response.data.error);
         signOut();
+      } else {
+        toast.error(error.response.data.message);
       }
       console.error(error.response.data.errorType);
     } finally {

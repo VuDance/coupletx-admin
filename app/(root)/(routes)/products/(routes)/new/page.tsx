@@ -4,12 +4,12 @@ import Container from "../components/Container";
 import prisma from "@/lib/prismadb";
 
 const Page = async () => {
-  const collections = await prisma.collections.findMany();
+  const subCategory = await prisma.subCategory.findMany();
 
   return (
     <div className="p-3 w-4/5">
       <BackButton href="/products" label="Thêm sản phẩm" />
-      <Container collections={collections} categories={[]} />
+      <Container subCategory={subCategory} />
     </div>
   );
 };

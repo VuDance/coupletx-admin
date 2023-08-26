@@ -8,6 +8,7 @@ import { signOut, useSession } from "next-auth/react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import DeleteModal from "@/app/components/modals/DeleteModal";
 
 interface ModalSubCategoryProps {
   open: boolean;
@@ -27,6 +28,8 @@ const ModalSubCategory: React.FC<ModalSubCategoryProps> = ({
   const router = useRouter();
   const session: any = useSession();
   const [loading, setLoading] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
   const method = useForm({
     values: {
       category_id: category_id ? category_id : "",
@@ -36,8 +39,17 @@ const ModalSubCategory: React.FC<ModalSubCategoryProps> = ({
       slug: data ? data.slug : "",
     },
   });
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
   const handleSubmitData = async (data: any) => {
     // console.log(data);
+    if (data.image === "" || data.name === "" || data.slug === "") {
+      toast.error("Vui lòng điền đầy đủ và hợp lệ thông tin");
+      return;
+    }
     try {
       setLoading(true);
       const res = await axios.post(`/api/subcategories/${action}`, data, {
@@ -45,20 +57,20 @@ const ModalSubCategory: React.FC<ModalSubCategoryProps> = ({
           authorization: session.data.accessToken,
         },
       });
-      if (res.data.errorType === "Authorization") {
-        toast.error(res.data.error);
-      } else if (res.data.errorType === "TokenExpired") {
-        toast.error(res.data.error);
-        signOut();
-      } else {
-        toast.success(res.data.message);
-        router.refresh();
-      }
+
+      toast.success(res.data.message);
+      router.refresh();
+
       handleClose();
     } catch (error: any) {
+      if (error.response.data.errorType === "Authorization") {
+        toast.error(error.response.data.error);
+      }
       if (error.response.data.errorType === "TokenExpired") {
         toast.error(error.response.data.error);
         signOut();
+      } else {
+        toast.error(error.response.data.message);
       }
       console.error(error);
     } finally {
@@ -67,6 +79,11 @@ const ModalSubCategory: React.FC<ModalSubCategoryProps> = ({
   };
   return (
     <FormProvider {...method}>
+      <DeleteModal
+        isOpen={openDeleteModal}
+        onClose={handleCloseDeleteModal}
+        inputData={{ type: "subcategories", id: data?.id || -1 }}
+      />
       <Modal
         className="flex justify-between items-center"
         open={open}
@@ -78,23 +95,36 @@ const ModalSubCategory: React.FC<ModalSubCategoryProps> = ({
           onSubmit={method.handleSubmit(handleSubmitData)}
           className="w-1/3 flex flex-col gap-2 p-2 h-auto bg-white rounded-xl"
         >
-          <p>
+          <div>
             {action === "create" ? (
               "Tạo danh mục con"
             ) : (
-              <p>
+              <div>
                 Chỉnh sửa danh mục{" "}
                 <span className=" font-semibold">{data?.name}</span>
-              </p>
+              </div>
             )}
-          </p>
+          </div>
           <InputForm label="Tên danh mục" id="name" />
           <InputForm label="Slug" id="slug" slug />
           <div className="w-full">
             <p>Hình ảnh</p>
             <UploadImageWrapper multiple={false} />
           </div>
-          <div className="w-full justify-end flex ">
+          <div className="w-full gap-2 justify-end flex ">
+            {action === "edit" && (
+              <Button
+                disabled={loading}
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  setOpenDeleteModal(true), handleClose();
+                }}
+                className=" normal-case text-white bg-orange-600"
+              >
+                Xóa
+              </Button>
+            )}
             <Button
               disabled={loading}
               type="submit"
@@ -102,7 +132,7 @@ const ModalSubCategory: React.FC<ModalSubCategoryProps> = ({
               color="success"
               className=" normal-case text-white bg-green-600"
             >
-              Thêm
+              {action === "edit" ? "OK" : "Thêm"}
             </Button>
           </div>
         </form>

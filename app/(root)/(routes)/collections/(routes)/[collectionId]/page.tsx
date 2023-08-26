@@ -5,14 +5,15 @@ import getCategories from "@/app/common/function/getCategories";
 
 const Page = async (params: any) => {
   const { collectionId } = params.params;
-  const categories = await getCategories();
+  const categories = await getCategories({
+    collectionId: parseInt(collectionId),
+  });
 
   const res = await fetch(
     `${process.env.MY_URL}/api/collections/${collectionId}`,
     { mode: "cors", cache: "no-store" }
   );
   const data = await res.json();
-  console.log(data);
   const convertData = {
     ...data.collection,
     collectionId,

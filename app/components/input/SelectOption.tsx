@@ -2,6 +2,7 @@
 
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import React, { useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 // interface DataProps {
 //   id: number;
@@ -12,17 +13,21 @@ interface SelectOptionProps {
   title: string;
   selectedValue: string;
   data: any[];
+  id: string;
 }
 const SelectOption: React.FC<SelectOptionProps> = ({
   title,
   data,
   selectedValue,
+  id,
 }) => {
-  const [value, setValue] = useState<string>(selectedValue);
+  const [value, setValueData] = useState<string>(selectedValue);
+  const { setValue } = useFormContext();
 
   const handleChange = (event: SelectChangeEvent) => {
     console.log(event.target.value as string);
-    setValue(event.target.value as string);
+    setValueData(event.target.value as string);
+    setValue(id, event.target.value as string);
   };
   return (
     <div>

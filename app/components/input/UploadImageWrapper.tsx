@@ -19,18 +19,22 @@ const UploadImageWrapper: React.FC<UploadImageWrapperProps> = ({
   data,
 }) => {
   const { setValue, getValues } = useFormContext();
-  const [images, setImages] = useState<string[]>(data || []);
+  const [images, setImages] = useState<any[]>(data || []);
 
   const handleUpload = async (img: string) => {
     setImages((pre) => [...pre, img]);
   };
+
+  const onDelete = (img: string) => {
+    setImages(images.filter((image) => image !== img));
+  };
+
   useEffect(() => {
     if (color) {
       const productVariantIndex = getValues("productVariant").findIndex(
         (item: any) => item.color === color
       );
       setValue(`productVariant.${productVariantIndex}.images`, images);
-      console.log(productVariantIndex);
     }
   }, [images, setValue, getValues, color]);
 
@@ -45,10 +49,11 @@ const UploadImageWrapper: React.FC<UploadImageWrapperProps> = ({
             className="relative group overflow-hidden w-[calc(100%_/_3_-_4px)] h-[200px] flex items-center justify-center"
           >
             <div className=" flex items-center justify-center transition-all group-hover:translate-y-0 translate-y-12 left-0 bottom-0 absolute w-full h-1/3 bg-[0,0,0,0.5]">
-              <IconButton>
+              <IconButton onClick={() => onDelete(image)}>
                 <DeleteIcon fontSize="large" sx={{ color: "#ccc" }} />
               </IconButton>
             </div>
+
             <Image
               width={200}
               height={200}

@@ -9,6 +9,7 @@ import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import DeleteModal from "@/app/components/modals/DeleteModal";
 
 interface ModalCreateCategoryProps {
   action: string;
@@ -25,6 +26,7 @@ const ModalCreateCategory: React.FC<ModalCreateCategoryProps> = ({
 }) => {
   const router = useRouter();
   const session: any = useSession();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const method = useForm({
     values: {
@@ -35,7 +37,22 @@ const ModalCreateCategory: React.FC<ModalCreateCategoryProps> = ({
       slug: data ? data.slug : "",
     },
   });
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
   const handleSubmitData = async (data: any) => {
+    if (
+      data.image === "" ||
+      data.gender === "" ||
+      (data.gender !== "Nam" && data.gender !== "Nữ") ||
+      data.name === "" ||
+      data.slug === ""
+    ) {
+      toast.error("Vui lòng điền đầy đủ và hợp lệ thông tin");
+      return;
+    }
     try {
       setLoading(true);
       const res = await axios.post(`/api/categories/${action}`, data, {
@@ -43,29 +60,33 @@ const ModalCreateCategory: React.FC<ModalCreateCategoryProps> = ({
           authorization: session.data.accessToken,
         },
       });
-      if (res.data.errorType === "Authorization") {
-        toast.error(res.data.error);
-      } else if (res.data.errorType === "TokenExpired") {
-        console.log("eheel");
-        toast.error(res.data.error);
-        signOut();
-      } else {
-        toast.success(res.data.message);
-        router.refresh();
-      }
+
+      toast.success(res.data.message);
+      router.refresh();
+
       handleClose();
     } catch (error: any) {
+      if (error.response.data.errorType === "Authorization") {
+        toast.error(error.response.data.error);
+      }
       if (error.response.data.errorType === "TokenExpired") {
         toast.error(error.response.data.error);
         signOut();
+      } else {
+        toast.error(error.response.data.message);
       }
-      console.error(error.response.data.errorType);
+      // console.error(error.response);
     } finally {
       setLoading(false);
     }
   };
   return (
     <FormProvider {...method}>
+      <DeleteModal
+        isOpen={openDeleteModal}
+        onClose={handleCloseDeleteModal}
+        inputData={{ type: "categories", id: data?.id }}
+      />
       <Modal
         className="flex justify-between items-center"
         open={open}
@@ -89,7 +110,20 @@ const ModalCreateCategory: React.FC<ModalCreateCategoryProps> = ({
             <p>Hình ảnh</p>
             <UploadImageWrapper multiple={false} />
           </div>
-          <div className="w-full justify-end flex ">
+          <div className="w-full gap-2 justify-end flex ">
+            {action === "edit" && (
+              <Button
+                disabled={loading}
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  setOpenDeleteModal(true), handleClose();
+                }}
+                className=" normal-case text-white bg-orange-600"
+              >
+                Xóa
+              </Button>
+            )}
             <Button
               disabled={loading}
               type="submit"
@@ -97,7 +131,7 @@ const ModalCreateCategory: React.FC<ModalCreateCategoryProps> = ({
               color="success"
               className=" normal-case text-white bg-green-600"
             >
-              Thêm
+              {action === "edit" ? "OK" : "Thêm"}
             </Button>
           </div>
         </form>

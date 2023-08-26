@@ -4,7 +4,7 @@ import prisma from "@/lib/prismadb";
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { description, image, name, status, collectionId } = body;
+    const { description, image, name, status, collectionId, categories } = body;
 
     await prisma.collections.update({
       where: {
@@ -17,6 +17,26 @@ export async function PUT(request: NextRequest) {
         status,
       },
     });
+
+    await prisma.category.updateMany({
+      where: {
+        collection_id: parseInt(collectionId),
+      },
+      data: {
+        collection_id: null,
+      },
+    });
+    await prisma.category.updateMany({
+      where: {
+        name: {
+          in: categories,
+        },
+      },
+      data: {
+        collection_id: parseInt(collectionId),
+      },
+    });
+
     return NextResponse.json({
       message: "Updated collection",
       success: true,

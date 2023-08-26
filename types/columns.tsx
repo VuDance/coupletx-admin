@@ -67,8 +67,8 @@ const columnsCollections: GridColDef[] = [
     ),
   },
   {
-    field: "product",
-    headerName: "Sản phẩm",
+    field: "categories",
+    headerName: "Danh mục",
     headerAlign: "center",
     disableColumnMenu: true,
     filterable: false,
@@ -77,11 +77,7 @@ const columnsCollections: GridColDef[] = [
     align: "center",
 
     renderCell: (param: GridRenderCellParams<any>) => (
-      <p
-        style={param.value.length === 0 ? { color: "red" } : { color: "green" }}
-      >
-        Còn {param.value.length} trong kho
-      </p>
+      <p>Có {param.value.length} danh mục</p>
     ),
   },
 

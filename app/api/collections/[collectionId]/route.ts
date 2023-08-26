@@ -11,7 +11,6 @@ export async function GET(
         id: parseInt(params.collectionId),
       },
       include: {
-        product: true,
         categories: true,
       },
     });

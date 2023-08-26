@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 interface DataProps {
   type: string;
@@ -16,21 +17,44 @@ interface DataProps {
 interface DeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: DataProps;
+  inputData: DataProps;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, data }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({
+  isOpen,
+  onClose,
+  inputData,
+}) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const session: any = useSession();
+
+  const data = {
+    type: inputData.type,
+    id: inputData.id,
+  };
 
   const handleDelete = async () => {
     // console.log(data);
     try {
       setLoading(true);
-      const res = await axios.delete(`/api/${data.type}/delete`, { data });
+      const res = await axios.delete(`/api/${data.type}/delete`, {
+        data,
+        headers: {
+          authorization: session?.data?.accessToken,
+        },
+      });
       toast.success(res.data.message);
     } catch (error: any) {
-      toast.error(error.message);
+      if (error.response.data.errorType === "Authorization") {
+        toast.error(error.response.data.error);
+      }
+      if (error.response.data.errorType === "TokenExpired") {
+        toast.error(error.response.data.error);
+        signOut();
+      } else {
+        toast.error(error.response.data.message);
+      }
       console.error(error);
     } finally {
       setLoading(false);
@@ -42,7 +66,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, data }) => {
   return (
     <Modal
       style={{ backgroundColor: "transparent" }}
-      BackdropProps={{ style: { backgroundColor: "transparent" } }}
+      // BackdropProps={{ style: { backgroundColor: "transparent" } }}
       className="flex items-center justify-center "
       open={isOpen}
       onClose={onClose}

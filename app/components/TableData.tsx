@@ -9,6 +9,7 @@ import DeleteModal from "./modals/DeleteModal";
 import useDeleteAllModal from "../hooks/useDeleteAllModal";
 import DeleteAllModal from "./modals/DeleteAllModal";
 import { Button } from "@mui/material";
+import { columnsProduct } from "@/types/columnsProducts";
 
 interface TableDataProps {
   type: string;
@@ -24,17 +25,20 @@ const TableData: React.FC<TableDataProps> = ({ rows, type }) => {
     if (type === "collections") {
       setColumns(columnsCollections);
     }
+    if (type === "products") {
+      setColumns(columnsProduct);
+    }
   }, [type]);
 
   return (
     <>
       <DeleteModal
-        data={{ type: "collections", id: parseInt(modal.value) }}
+        inputData={{ type: type, id: parseInt(modal.value) }}
         isOpen={modal.isOpen}
         onClose={modal.onClose}
       />
       <DeleteAllModal
-        data={{ type: "collections", data: modalDeleteAll.value }}
+        inputData={{ type: type, data: modalDeleteAll.value }}
         isOpen={modalDeleteAll.isOpen}
         onClose={modalDeleteAll.onClose}
       />

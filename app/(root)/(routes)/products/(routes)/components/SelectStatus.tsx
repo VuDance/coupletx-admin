@@ -1,7 +1,12 @@
+"use client";
+
 import React from "react";
 import SelectOption from "@/app/components/input/SelectOption";
+import { useFormContext } from "react-hook-form";
 
 const SelectStatus = () => {
+  const { getValues } = useFormContext();
+
   const selectValue = [
     {
       id: 1,
@@ -16,7 +21,8 @@ const SelectStatus = () => {
   return (
     <div className="bg-[#fff] rounded-lg shadow-md p-3">
       <SelectOption
-        selectedValue={selectValue[0].name}
+        id="active"
+        selectedValue={getValues("active")}
         data={selectValue}
         title="Trạng thái"
       />

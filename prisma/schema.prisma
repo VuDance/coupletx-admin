@@ -10,6 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
   relationMode = "prisma"
 }
+
+model OverallStat{
+  id           Int           @id @default(autoincrement())
+  employee Int
+  income Float
+  totalUser Int
+  sales Int
+  saleByMonth SaleByMonth[] 
+  year Int
+}
+model SaleByMonth{
+  id           Int           @id @default(autoincrement())
+  year Int
+  month Int
+  sale Int
+  overrallStat_id Int
+
+  overallStat OverallStat @relation(fields: [overrallStat_id],references: [id],onDelete: Cascade)
+
+  @@index([overrallStat_id])
+}
+
 model Category {
   id           Int           @id @default(autoincrement())
   name         String 
@@ -18,7 +40,6 @@ model Category {
   slug String
   collection_id Int?
   subcategories SubCategory[]
-  products     Product[]
    collection Collections? @relation(fields: [collection_id], references: [id], onDelete: Cascade)
 
   @@index([collection_id])
@@ -30,7 +51,7 @@ model SubCategory {
   image        String
   category_id  Int
   slug String
-  products     Product[]
+  products     ProductOnSubCategory[]
   category     Category  @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@index([category_id])
@@ -39,23 +60,30 @@ model SubCategory {
 model Product {
   id                Int       @id @default(autoincrement())
   product_name      String
-  category_id       Int
-  subcategory_id    Int
-  collection_id     Int?
-  favorite_counters Int
+  favorite_counters Int @default(0)
   product_references        String @db.VarChar(1000)
-  information       String @db.VarChar(1000)
-  created_at        DateTime
-  gender         String
+  description       String @db.VarChar(1000)
+  created_at        DateTime  @default(now())
+  maxPrice Float
+  minPrice Float
+  quantity Int
+  slug String
+  active String
   rates            Rate[]
   productVariants  ProductsVariant[]
-  collection Collections? @relation(fields: [collection_id], references: [id], onDelete: Cascade)
-  category          Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
-  sub_category      SubCategory @relation(fields: [subcategory_id], references: [id], onDelete: Cascade)
+  
+  sub_category      ProductOnSubCategory[]
 
-  @@index([category_id])
-  @@index([subcategory_id])
-  @@index([collection_id])
+}
+model ProductOnSubCategory{
+  id                Int       @id @default(autoincrement())
+  product Product @relation(fields: [productId],references: [id],onDelete: Cascade)
+  productId Int 
+  subcategory SubCategory @relation(fields: [subcategoryId],references: [id])
+  subcategoryId Int 
+
+  @@index([productId])
+  @@index([subcategoryId])
 }
 
 model ProductsVariant {
@@ -79,7 +107,7 @@ model Size {
   name_size             String
   product_variant_id    Int
   technical_specification TechnicalSpecification[]
-  product_variant        ProductsVariant @relation(fields: [product_variant_id], references: [id], onDelete: Cascade)
+  product_variant        ProductsVariant @relation(fields: [product_variant_id], references: [id],onDelete: Cascade)
 
   @@index([product_variant_id])
 }
@@ -87,7 +115,7 @@ model Size {
 model TechnicalSpecification {
   id                             Int       @id @default(autoincrement())
   name_technical_specification   String
-  value                          Float
+  value                          String
   size_id                        Int
   size                           Size      @relation(fields: [size_id], references: [id], onDelete: Cascade)
 
@@ -98,7 +126,7 @@ model ProductVariantImage {
   id                   Int       @id @default(autoincrement())
   imageUrl             String
   product_variant_id   Int
-  productVariant       ProductsVariant @relation(fields: [product_variant_id], references: [id], onDelete: Cascade)
+  productVariant       ProductsVariant @relation(fields: [product_variant_id], references: [id],onDelete: Cascade)
 
   @@index([product_variant_id])
 }
@@ -110,7 +138,6 @@ model Collections{
   image String
   description String  @db.VarChar(1000)
   status Int
-  product Product[]
   categories Category[]
 }
 

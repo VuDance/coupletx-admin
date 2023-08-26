@@ -12,7 +12,6 @@ const Page = async ({ searchParams }: any) => {
     }
   );
   const data = await res.json();
-
   return (
     <div className="w-[80%] p-3">
       <Container

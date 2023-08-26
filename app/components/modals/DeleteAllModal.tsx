@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface DataProps {
   type: string;
@@ -16,22 +17,33 @@ interface DataProps {
 interface DeleteAllModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: DataProps;
+  inputData: DataProps;
 }
 
 const DeleteAllModal: React.FC<DeleteAllModalProps> = ({
   isOpen,
   onClose,
-  data,
+  inputData,
 }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const session: any = useSession();
+
+  const data = {
+    type: inputData.type,
+    id: inputData.data,
+  };
 
   const handleDelete = async () => {
     // console.log(data);
     try {
       setLoading(true);
-      const res = await axios.delete(`/api/${data.type}/deleteAll`, { data });
+      const res = await axios.delete(`/api/${data.type}/deleteAll`, {
+        data,
+        headers: {
+          authorization: session?.data?.accessToken,
+        },
+      });
       toast.success(res.data.message);
     } catch (error: any) {
       toast.error(error.message);
@@ -46,7 +58,6 @@ const DeleteAllModal: React.FC<DeleteAllModalProps> = ({
   return (
     <Modal
       style={{ backgroundColor: "transparent" }}
-      BackdropProps={{ style: { backgroundColor: "transparent" } }}
       className="flex items-center justify-center "
       open={isOpen}
       onClose={onClose}

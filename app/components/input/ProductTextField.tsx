@@ -26,7 +26,9 @@ const ProductTextField: React.FC<ProductTextFieldProps> = ({
   value,
 }) => {
   const { register, getValues, setValue } = useFormContext();
-  const [text, setText] = useState(value || getValues("name") || "");
+  const [text, setText] = useState(
+    value || getValues(id) || getValues("name") || ""
+  );
 
   const handleChange = (value: string) => {
     setText(value);
