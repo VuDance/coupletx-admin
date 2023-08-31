@@ -8,9 +8,10 @@ interface MarkdownProps {
   label: string;
   id: string;
   control: any;
+  large?: boolean;
 }
 
-const Markdown: React.FC<MarkdownProps> = ({ label, id, control }) => {
+const Markdown: React.FC<MarkdownProps> = ({ label, id, control, large }) => {
   return (
     <Controller
       name={id}
@@ -19,8 +20,12 @@ const Markdown: React.FC<MarkdownProps> = ({ label, id, control }) => {
       // rules={{ required: true }}
       render={({ field: { onChange, value } }) => (
         <div data-color-mode="light">
-          <p>{label}</p>
-          <MDEditor value={value} onChange={onChange} />
+          <p className=" font-semibold">{label}</p>
+          <MDEditor
+            className={`${large && "!h-[500px]"}`}
+            value={value}
+            onChange={onChange}
+          />
         </div>
       )}
     />

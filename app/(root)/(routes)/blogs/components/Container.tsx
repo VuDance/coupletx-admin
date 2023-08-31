@@ -3,9 +3,11 @@
 import SearchFilter from "@/app/components/SearchFilter";
 import { Button } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import TableData from "./TableData";
+import CreateBlogModal from "./modals/CreateBlogModal";
+import { useSession } from "next-auth/react";
 
 interface ContainerProps {
   rows: any[];
@@ -20,8 +22,9 @@ const Container: React.FC<ContainerProps> = ({
   textBtn,
   error,
 }) => {
-  const router = useRouter();
-  const pathname = usePathname();
+  const session: any = useSession();
+
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   useEffect(() => {
     if (error && error.length > 0) {
       toast.error(error);
@@ -29,11 +32,16 @@ const Container: React.FC<ContainerProps> = ({
   }, [error]);
   return (
     <div className=" w-[80%] p-3">
+      <CreateBlogModal
+        session={session}
+        isOpen={openCreateModal}
+        onClose={() => setOpenCreateModal(false)}
+      />
       <div className="w-[100%] gap-2 flex flex-col justify-center">
         <div className=" w-[100%] flex justify-between items-center">
           <h4 className=" text-xl font-semibold">{title}</h4>
           <Button
-            onClick={() => router.push(pathname + "/new")}
+            onClick={() => setOpenCreateModal(true)}
             className=" bg-green-800 normal-case"
             variant="contained"
             color="success"
@@ -45,7 +53,7 @@ const Container: React.FC<ContainerProps> = ({
           <SearchFilter />
         </div>
         {/* <TableData rows={rows || []} type={type} /> */}
-        <TableData rows={[{ name: "1", history: [{ customerId: 1 }] }]} />
+        <TableData rows={rows} />
       </div>
     </div>
   );

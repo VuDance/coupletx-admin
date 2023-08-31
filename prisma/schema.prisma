@@ -225,13 +225,12 @@ model CartItem {
 model Blogs {
   id        Int      @id @default(autoincrement())
   title     String
-  user_id   String
+  author   String
   image     String
+  slug String
   created_at DateTime @default(now())
   posts Posts[]
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
 }
 
 model User {
@@ -252,8 +251,7 @@ model User {
   orders Order[]
   carts  Cart[]
   accounts      Account[]
-  blogs  Blogs[]
-  posts  Posts[]
+
   reviews Rate[]
 }
 model Account {
@@ -278,14 +276,12 @@ model Account {
 model Posts {
   id         Int      @id @default(autoincrement())
   title      String
-  author_id  String
+  author  String
   created_at DateTime @default(now())
   body String @db.VarChar(5000)
   blog_id Int
   image String
-  user User  @relation(fields: [author_id], references: [id], onDelete: Cascade)
   blog Blogs @relation(fields: [blog_id], references: [id], onDelete: Cascade)
 
-  @@index([author_id])
   @@index([blog_id])
 }

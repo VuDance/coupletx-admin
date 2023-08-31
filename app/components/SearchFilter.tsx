@@ -1,14 +1,18 @@
 "use client";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputBase } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
 const SearchFilter = () => {
+  const param = useSearchParams();
+  const search = param && param.get("filter");
   const router = useRouter();
   const [show, setShow] = useState(false);
+  const [searchValue, setSearchValue] = useState(search || "");
   const handleSearch = (value: string) => {
     router.push(`?filter=${value}`);
+    setSearchValue(value);
   };
 
   return (
@@ -21,6 +25,7 @@ const SearchFilter = () => {
         <SearchIcon color="primary" />
       </div>
       <InputBase
+        value={searchValue}
         onFocus={() => setShow(true)}
         onBlur={() => setShow(false)}
         onChange={(e) => handleSearch(e.target.value)}

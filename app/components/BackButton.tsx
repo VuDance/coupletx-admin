@@ -13,10 +13,7 @@ interface BackButtonProps {
 const BackButton: React.FC<BackButtonProps> = ({ href, label }) => {
   const router = useRouter();
   return (
-    <div
-      onClick={() => router.push(href)}
-      className="flex gap-3 pl-8 items-center"
-    >
+    <div onClick={() => router.push(href)} className="flex gap-3 items-center">
       <Button
         variant="outlined"
         className=" text-[#616a75] border-[#616a75] hover:border-[#616a75] hover:text-[black]"

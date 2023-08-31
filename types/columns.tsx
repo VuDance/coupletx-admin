@@ -42,9 +42,6 @@ const columnsCollections: GridColDef[] = [
     align: "center",
     flex: 1,
 
-    cellClassName: (params: GridCellParams<Number>) => {
-      return "bg-green-400";
-    },
     renderCell: (param: GridRenderCellParams<Number>) => (
       <>
         {param.value === 1 ? (
