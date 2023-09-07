@@ -6,16 +6,11 @@ export default async function getCategories({ collectionId }: any) {
     console.log(collectionId);
     const categoriesNull = await prisma.category.findMany({
       where: {
-        collection_id: null,
-      },
-    });
-    const categoriesNotNull = await prisma.category.findMany({
-      where: {
-        collection_id: collectionId,
+        OR: [{ collection_id: null }, { collection_id: collectionId }],
       },
     });
 
-    const categories: Category[] = [...categoriesNull, ...categoriesNotNull];
+    const categories: Category[] = [...categoriesNull];
 
     return categories as Category[];
   } catch (error: any) {

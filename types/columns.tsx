@@ -1,16 +1,10 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {
-  GridCellParams,
-  GridColDef,
-  GridRenderCellParams,
-} from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import Image from "next/image";
 import EditIcon from "@mui/icons-material/Edit";
 import React from "react";
 import { IconButton, Link } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useModalDelete from "@/app/hooks/useModalDelete";
-import DeleteModal from "@/app/components/modals/DeleteModal";
 
 const columnsCollections: GridColDef[] = [
   {
@@ -28,7 +22,7 @@ const columnsCollections: GridColDef[] = [
 
   {
     field: "name",
-    headerName: "Tên sản phẩm",
+    headerName: "Tên bộ sưu tập",
 
     flex: 1,
   },
@@ -90,6 +84,7 @@ const columnsCollections: GridColDef[] = [
     align: "center",
 
     renderCell: (param: GridRenderCellParams<any>) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const modal = useModalDelete();
 
       return (

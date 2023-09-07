@@ -6,24 +6,17 @@ import { IconButton, Link } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useModalDelete from "@/app/hooks/useModalDelete";
 
-const columnsProduct: GridColDef[] = [
+const columnsOrders: GridColDef[] = [
   {
-    field: "imageUrl",
-    headerName: "",
-    width: 50,
-    disableColumnMenu: true,
-    filterable: false,
-    sortable: false,
-  },
-
-  {
-    field: "product_name",
-    headerName: "Tên sản phẩm",
-
+    field: "user",
+    headerName: "Tên đơn hàng",
     flex: 1,
+    renderCell: (param: GridRenderCellParams<any>) => (
+      <p>Đơn hàng của {param.value.name}</p>
+    ),
   },
   {
-    field: "active",
+    field: "status",
     headerName: "Trạng thái",
     disableColumnMenu: true,
     filterable: false,
@@ -49,15 +42,17 @@ const columnsProduct: GridColDef[] = [
             Đang hoạt động
           </p>
         ) : (
-          <p style={{ backgroundColor: "red", padding: 5, borderRadius: 10 }}>
-            Không hoạt động
+          <p
+            style={{ backgroundColor: "orange", padding: 5, borderRadius: 10 }}
+          >
+            Đang chờ
           </p>
         )}
       </>
     ),
   },
   {
-    field: "quantity",
+    field: "phone_number",
     headerName: "Số lượng",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -66,9 +61,19 @@ const columnsProduct: GridColDef[] = [
     flex: 1,
     align: "center",
 
-    renderCell: (param: GridRenderCellParams<any>) => (
-      <p>Có {param.value} sản phẩm</p>
-    ),
+    renderCell: (param: GridRenderCellParams<any>) => <p> {param.value}</p>,
+  },
+  {
+    field: "total_price",
+    headerName: "Giá tiền",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    filterable: false,
+    sortable: false,
+    flex: 1,
+    align: "center",
+
+    renderCell: (param: GridRenderCellParams<any>) => <p>{param.value}</p>,
   },
 
   {
@@ -106,4 +111,4 @@ const columnsProduct: GridColDef[] = [
   },
 ];
 
-export { columnsProduct };
+export { columnsOrders };

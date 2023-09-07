@@ -60,7 +60,7 @@ const Container: React.FC<ContainerProps> = ({ data }) => {
 
       <div className="flex justify-between">
         <Chart dataChart={data?.overallStat?.dataByMonth} />
-        <NewBlog />
+        <NewBlog data={data?.overallStat?.blogs} />
       </div>
     </div>
   );

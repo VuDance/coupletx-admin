@@ -170,13 +170,14 @@ model RateImage{
 
 
 model Order {
-  id             Int      @id @default(autoincrement())
+  id             String       @id @default(cuid()) @unique
   user_id        String
   total_price    Float
   full_name String
   phone_number String
   address        String
   payment_method String
+  status String
   created_at     DateTime @default(now())
   order_item OrderItem[]
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -186,10 +187,12 @@ model Order {
 
 model OrderItem {
   id                  Int      @id @default(autoincrement())
-  order_id            Int
+  order_id            String
   product_variant_id  Int
   quantity            Int
   total_price         Float
+  size String
+  color String
   product_variant     ProductsVariant @relation(fields: [product_variant_id], references: [id], onDelete: Cascade)
   order               Order           @relation(fields: [order_id], references: [id], onDelete: Cascade)
 
@@ -199,11 +202,11 @@ model OrderItem {
 
 model Cart {
   id      Int      @id @default(autoincrement())
-  user_id String
+  user_id String @unique
   cart_item CartItem[]
   user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@index([user_id])
+  // @@index([user_id])
 }
 
 model CartItem {
@@ -240,7 +243,7 @@ model User {
   password String?
   gender        String? 
   image           String?
-  isAdmin Boolean
+  isAdmin Boolean?
   emailVerified   DateTime?
   active Boolean @default(false)
   verify_token String?
@@ -249,7 +252,7 @@ model User {
   reset_password_token_expired DateTime?
   date_of_birth DateTime? @default(now())
   orders Order[]
-  carts  Cart[]
+  carts  Cart?
   accounts      Account[]
 
   reviews Rate[]

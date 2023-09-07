@@ -10,6 +10,7 @@ import useDeleteAllModal from "../hooks/useDeleteAllModal";
 import DeleteAllModal from "./modals/DeleteAllModal";
 import { Button } from "@mui/material";
 import { columnsProduct } from "@/types/columnsProducts";
+import { columnsOrders } from "@/types/columnsOrders";
 
 interface TableDataProps {
   type: string;
@@ -27,6 +28,9 @@ const TableData: React.FC<TableDataProps> = ({ rows, type }) => {
     }
     if (type === "products") {
       setColumns(columnsProduct);
+    }
+    if (type === "orders") {
+      setColumns(columnsOrders);
     }
   }, [type]);
 
