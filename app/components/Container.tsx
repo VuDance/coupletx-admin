@@ -14,6 +14,7 @@ interface ContainerProps {
   title: string;
   textBtn: string;
   error?: string;
+  hideCreateButton?: boolean;
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -22,6 +23,7 @@ const Container: React.FC<ContainerProps> = ({
   title,
   textBtn,
   error,
+  hideCreateButton,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -35,14 +37,16 @@ const Container: React.FC<ContainerProps> = ({
     <div className="w-[100%] gap-2 flex flex-col justify-center">
       <div className=" w-[100%] flex justify-between items-center">
         <h4 className=" text-xl font-semibold">{title}</h4>
-        <Button
-          onClick={() => router.push(pathname + "/new")}
-          className=" bg-green-800 normal-case"
-          variant="contained"
-          color="success"
-        >
-          {textBtn}
-        </Button>
+        {!hideCreateButton && (
+          <Button
+            onClick={() => router.push(pathname + "/new")}
+            className=" bg-green-800 normal-case"
+            variant="contained"
+            color="success"
+          >
+            {textBtn}
+          </Button>
+        )}
       </div>
       <div className="w-full flex items-end justify-end">
         <SearchFilter />

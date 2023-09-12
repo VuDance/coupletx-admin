@@ -7,10 +7,19 @@ export async function GET(request: NextRequest) {
       include: {
         order_item: {
           include: {
-            product_variant: true,
+            product_variant: {
+              include: {
+                images: true,
+              },
+            },
           },
         },
-        user: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
     return NextResponse.json({

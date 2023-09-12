@@ -18,7 +18,8 @@ const Page = async ({ searchParams }: any) => {
         type="orders"
         rows={data.orders}
         textBtn="Tạo bộ sưu tập"
-        title="Bộ sưu tập"
+        title="Đơn đặt hàng"
+        hideCreateButton={true}
       />
     </div>
   );
