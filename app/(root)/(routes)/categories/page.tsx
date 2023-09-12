@@ -1,11 +1,16 @@
 import React from "react";
 import Container from "./components/Container";
 
-const page = async () => {
-  const res = await fetch(`${process.env.MY_URL}/api/categories/find`, {
-    mode: "cors",
-    cache: "no-store",
-  });
+const page = async ({ searchParams }: any) => {
+  const res = await fetch(
+    `${process.env.MY_URL}/api/categories/find?filter=${
+      searchParams.filter || ""
+    }`,
+    {
+      mode: "cors",
+      cache: "no-store",
+    }
+  );
   const data = await res.json();
 
   return (
