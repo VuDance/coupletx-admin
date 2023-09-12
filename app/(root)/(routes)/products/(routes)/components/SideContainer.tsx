@@ -11,7 +11,9 @@ const SideContainer: React.FC<SideContainerProps> = ({ subCategory }) => {
     <div className="basis-1/3 flex flex-col gap-3 h-auto ">
       <SelectStatus />
       {/* <SelectCollection selectValue={subCategory} /> */}
-      <ChipSelect data={subCategory} label="Danh mục" type="subCategory" />
+      <div className=" bg-white p-3 shadow-md rounded-md">
+        <ChipSelect data={subCategory} label="Danh mục" type="subCategory" />
+      </div>
     </div>
   );
 };

@@ -55,7 +55,35 @@ const Container: React.FC<ContainerProps> = ({
     },
   });
   const onSubmit = async (data: any) => {
-    // console.log(session.data.accessToken);
+    if (
+      data.product_name === "" ||
+      data.slug === "" ||
+      data.description === "" ||
+      data.preference === "" ||
+      data.quantity === ""
+    ) {
+      toast.error("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+    if (
+      data.maxPrice === "" ||
+      data.minPrice === "" ||
+      parseFloat(data.minPrice) > parseFloat(data.maxPrice)
+    ) {
+      toast.error("Giá dao động không hợp lệ");
+      return;
+    }
+
+    if (data.productVariant.length > 0) {
+      let sum = 0;
+      for (var i = 0; i < data.productVariant.length; i++) {
+        sum += parseFloat(data.productVariant[i].price);
+      }
+      if (sum > data.maxPrice) {
+        toast.error("Số lượng biến thể lớn hơn tổng số lượng sản phẩm");
+        return;
+      }
+    }
     try {
       setLoading(true);
       let res = null;
@@ -74,7 +102,7 @@ const Container: React.FC<ContainerProps> = ({
       toast.success(res.message);
     } catch (error: any) {
       console.log(error);
-      toast.success(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }

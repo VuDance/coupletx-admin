@@ -59,6 +59,7 @@ const InputModal: React.FC<InputModalProps> = ({
       <p className=" text-lg font-semibold">{label}</p>
       <TextField
         type={type}
+        inputProps={type === "number" ? { min: 1, max: 1000 } : {}}
         placeholder={placeholder}
         size="small"
         onChange={(e) => handleChange(e.target.value)}

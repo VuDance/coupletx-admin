@@ -29,7 +29,7 @@
     "eslint-config-next": "13.4.10",
     "jsonwebtoken": "^9.0.1",
     "jwt-decode": "^3.1.2",
-    "next": "13.4.10",
+    "next": "^13.4.12",
     "next-auth": "^4.22.1",
     "next-cloudinary": "^4.15.0",
     "postcss": "8.4.26",

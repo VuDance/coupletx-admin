@@ -14,12 +14,13 @@ interface ProductTextFieldProps {
   placeholder?: string;
   slug?: boolean;
   value?: string;
+  type?: string;
 }
 
 const ProductTextField: React.FC<ProductTextFieldProps> = ({
   label,
   id,
-
+  type,
   small,
   placeholder,
   slug,
@@ -41,6 +42,8 @@ const ProductTextField: React.FC<ProductTextFieldProps> = ({
           {...register(id)}
           className="text-sm"
           size="small"
+          inputProps={type === "number" ? { min: 1, max: 1000 } : {}}
+          type={type || "text"}
           fullWidth={!small}
           placeholder={placeholder}
           value={text}

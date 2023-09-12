@@ -59,18 +59,6 @@ const Size: React.FC<SizeProps> = ({ color }) => {
     setOpenEdit(true);
   };
 
-  // const click = () => {
-  //   console.log(sizeList);
-  // };
-  // const handleAddSize = (value: string) => {
-  //   setSizes((pre) => [
-  //     ...pre,
-  //     {
-  //       name_size: value,
-  //     },
-  //   ]);
-  //   handleCloseCreateSize();
-  // };
   return (
     <div className="w-full">
       {/* Modal create size */}

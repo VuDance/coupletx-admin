@@ -83,6 +83,7 @@ const ModalAddSize: React.FC<ModalAddSizeProps> = ({
       aria-describedby="modal-modal-description"
     >
       <div className=" bg-white rounded-lg p-3 w-1/3 ">
+        <p>Tên size</p>
         <TextField
           fullWidth
           onChange={(e) => setNameSize(e.target.value)}
@@ -117,7 +118,7 @@ const ModalAddSize: React.FC<ModalAddSizeProps> = ({
                   onChange={(e) =>
                     handleOnChange(index, "value", e.target.value)
                   }
-                  placeholder="Giá trị"
+                  placeholder="Ví dụ: 10cm"
                   size="small"
                 ></TextField>
               </div>

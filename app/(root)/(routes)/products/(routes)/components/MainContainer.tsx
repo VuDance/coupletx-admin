@@ -37,6 +37,7 @@ const MainContainer: React.FC<ProductTextFieldProps> = ({ control }) => {
         <ProductTextField
           label="Số lượng"
           small
+          type="number"
           id="quantity"
           placeholder="Số lượng"
         />

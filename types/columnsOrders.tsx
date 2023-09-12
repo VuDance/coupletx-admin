@@ -1,16 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import React from "react";
-import {
-  Box,
-  Divider,
-  IconButton,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Divider, IconButton, Modal } from "@mui/material";
 
-import useModalDelete from "@/app/hooks/useModalDelete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -128,7 +120,6 @@ const columnsOrders: GridColDef[] = [
     align: "center",
 
     renderCell: (param: GridRenderCellParams<any>) => {
-      console.log(param);
       const status = param.row.status;
       const session: any = useSession();
       const router = useRouter();
