@@ -2,14 +2,12 @@ import React from "react";
 import Container from "./components/Container";
 
 const page = async () => {
-  const [staticData] = await Promise.all([
-    fetch(`${process.env.MY_URL}/api/categories/find`, {
-      mode: "cors",
-      cache: "no-store",
-    }),
-  ]);
-  const data = await staticData.json();
-  console.log(data);
+  const res = await fetch(`${process.env.MY_URL}/api/categories/find`, {
+    mode: "cors",
+    cache: "no-store",
+  });
+  const data = await res.json();
+
   return (
     <div className="p-3 w-4/5">
       <p className=" text-xl font-semibold">Danh mục sản phẩm</p>
