@@ -23,7 +23,8 @@ const Page = () => {
       await axios.post("/api/user/register", data);
       toast.success("Đăng kí thành công");
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -85,7 +86,8 @@ const Page = () => {
       <AuthButton
         label="Continue with Google"
         icon={GoogleIcon}
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        // onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => signIn("google")}
       />
     </form>
   );

@@ -21,7 +21,6 @@ const Container: React.FC<ContainerProps> = ({ data, action, categories }) => {
   const [loading, setLoading] = useState(false);
   const userData: any = useSession();
   const router = useRouter();
-  // console.log(data.categories[0].name);
   const methods = useForm({
     defaultValues: {
       name: data ? data.name : "",
@@ -35,7 +34,6 @@ const Container: React.FC<ContainerProps> = ({ data, action, categories }) => {
   });
 
   const onSubmit = async (submitData: any) => {
-    // console.log(submitData);
     if (
       submitData.image === "" ||
       submitData.description === "" ||

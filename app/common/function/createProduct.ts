@@ -3,7 +3,6 @@ import axios from "axios";
 
 export default async function createProduct(data: any) {
   try {
-    // console.log(data);
     const res = await axios.post("/api/products/create", data, {
       headers: {
         authorization: data.token,

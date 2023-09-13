@@ -29,7 +29,6 @@ const page = async (params: any) => {
     ...prdv,
     images: prdv.images.map((img: any) => img.imageUrl),
   }));
-  // console.log(convertData);
   data.products.productVariants = convertData;
 
   return (

@@ -1,17 +1,9 @@
 "use client";
 
-import {
-  Avatar,
-  Badge,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-} from "@mui/material";
-import { User } from "next-auth";
+import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 import React from "react";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 
 import logo from "@/app/images/shopifycart.svg";
@@ -48,11 +40,11 @@ const Header = ({ currentUser }: any) => {
       </div>
       {currentUser ? (
         <div className=" flex justify-center items-center gap-3">
-          <IconButton>
+          {/* <IconButton>
             <Badge color="secondary" badgeContent={1}>
               <NotificationsActiveIcon sx={{ color: "#616a75" }} />
             </Badge>
-          </IconButton>
+          </IconButton> */}
           <div>
             <Button onClick={handleClick} className=" gap-3">
               <Avatar alt="Avatar" src={currentUser.image} />
@@ -67,8 +59,6 @@ const Header = ({ currentUser }: any) => {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={() => signOut()}>Logout</MenuItem>
             </Menu>
           </div>

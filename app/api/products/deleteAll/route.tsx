@@ -9,7 +9,6 @@ export async function DELETE(request: NextRequest) {
 
     const { id } = body;
 
-    console.log(id);
     const decodedToken: any = await jwt.verify(
       token || "",
       process.env.JWT_KEY!

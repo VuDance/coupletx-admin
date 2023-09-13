@@ -59,7 +59,6 @@ const ModalEditSize: React.FC<ModalEditSizeProps> = ({
     const productVariantIndex = productVariant.findIndex(
       (item: any) => item.color === color
     );
-    console.log(productVariant[productVariantIndex]);
     const updateData = productVariant[productVariantIndex].size.map(
       (item: any) =>
         item.name_size === data?.name_size

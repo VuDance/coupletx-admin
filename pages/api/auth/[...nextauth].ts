@@ -7,6 +7,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import jwt from "jsonwebtoken";
 
 import prisma from "@/lib/prismadb";
+import { sendEmail } from "@/app/common/function/nodemailer";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -27,7 +28,7 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid credentials");
+          throw new Error("Email hoặc password không hợp lệ");
         }
 
         const user = await prisma.user.findUnique({
@@ -37,7 +38,7 @@ export const authOptions: AuthOptions = {
         });
 
         if (!user || !user?.password) {
-          throw new Error("Invalid credentials");
+          throw new Error("Sai Email hoặc password");
         }
 
         const isCorrectPassword = await bcrypt.compare(
@@ -46,7 +47,11 @@ export const authOptions: AuthOptions = {
         );
 
         if (!isCorrectPassword) {
-          throw new Error("Invalid credentials");
+          throw new Error("Sai Email hoặc password");
+        }
+        if (user.active === false) {
+          sendEmail({ email: user.email, userId: user.id, type: "VERIFY" });
+          throw new Error("Vui lòng xác thực email");
         }
 
         return user;

@@ -49,7 +49,6 @@ const TableData: React.FC<TableDataProps> = ({ rows }) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n.title);
       setSelected(newSelected);
-      console.log(selected);
       return;
     }
     setSelected([]);

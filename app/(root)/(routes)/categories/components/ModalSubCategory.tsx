@@ -45,7 +45,6 @@ const ModalSubCategory: React.FC<ModalSubCategoryProps> = ({
   };
 
   const handleSubmitData = async (data: any) => {
-    // console.log(data);
     if (data.image === "" || data.name === "" || data.slug === "") {
       toast.error("Vui lòng điền đầy đủ và hợp lệ thông tin");
       return;

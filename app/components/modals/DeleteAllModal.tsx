@@ -35,7 +35,6 @@ const DeleteAllModal: React.FC<DeleteAllModalProps> = ({
   };
 
   const handleDelete = async () => {
-    // console.log(data);
     try {
       setLoading(true);
       const res = await axios.delete(`/api/${data.type}/deleteAll`, {

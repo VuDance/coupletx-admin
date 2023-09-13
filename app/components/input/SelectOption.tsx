@@ -25,7 +25,6 @@ const SelectOption: React.FC<SelectOptionProps> = ({
   const { setValue } = useFormContext();
 
   const handleChange = (event: SelectChangeEvent) => {
-    console.log(event.target.value as string);
     setValueData(event.target.value as string);
     setValue(id, event.target.value as string);
   };

@@ -52,7 +52,6 @@ const InputModal: React.FC<InputModalProps> = ({
 
       setValue("productVariant", parentData);
     }
-    console.log(getValues("productVariant"));
   };
   return (
     <div>

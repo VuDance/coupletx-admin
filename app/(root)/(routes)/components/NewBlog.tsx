@@ -7,7 +7,6 @@ interface NewBlogProps {
 }
 
 const NewBlog: React.FC<NewBlogProps> = ({ data }) => {
-  console.log(data);
   return (
     <div className=" mt-2 basis-1/3">
       <p className=" font-semibold mb-2">Blog mới</p>
