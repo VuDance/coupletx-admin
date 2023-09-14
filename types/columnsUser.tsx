@@ -41,7 +41,7 @@ const columnsUser: GridColDef[] = [
 
     renderCell: (param: GridRenderCellParams<Number>) => (
       <>
-        {param.value === 1 ? (
+        {param.value === true ? (
           <p
             style={{
               color: "black",
