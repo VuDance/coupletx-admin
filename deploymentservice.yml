@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-coupletx
+spec:
+  selector: # Define the wrapping strategy
+    matchLabels: # Match all pods with the defined labels
+      app: admin-coupletx # Labels follow the `name: value` template
+  template: # This is the template of the pod inside the deployment
+    metadata:
+      labels:
+        app: admin-coupletx
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+        - image: docker.io/vudance/coupletx-admin:latest
+          name: admin-coupletx
+          ports:
+            - containerPort: 3000
+              name: http
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+spec:
+  selector:
+    app: admin-coupletx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
