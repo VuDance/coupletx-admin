@@ -7,7 +7,11 @@ export async function GET(request: NextRequest) {
     if (query !== null) {
       const collections = await prisma.collections.findMany({
         include: {
-          categories: true,
+          categories: {
+            include: {
+              subcategories: true,
+            },
+          },
         },
         where: {
           name: {
