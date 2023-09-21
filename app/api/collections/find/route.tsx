@@ -25,7 +25,11 @@ export async function GET(request: NextRequest) {
     } else {
       const collections = await prisma.collections.findMany({
         include: {
-          categories: true,
+          categories: {
+            include: {
+              subcategories: true,
+            },
+          },
         },
       });
       return NextResponse.json({
