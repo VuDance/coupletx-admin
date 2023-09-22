@@ -5,7 +5,8 @@ import jwt from "jsonwebtoken";
 export async function DELETE(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, token } = body;
+    const token = request.headers.get("authorization");
+    const { id } = body;
 
     const decodedToken: any = await jwt.verify(
       token || "",

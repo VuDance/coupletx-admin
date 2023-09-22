@@ -28,7 +28,6 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const session: any = useSession();
-
   const data = {
     type: inputData.type,
     id: inputData.id,
@@ -44,6 +43,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
         },
       });
       toast.success(res.data.message);
+      router.refresh();
     } catch (error: any) {
       if (error.response.data.errorType === "Authorization") {
         toast.error(error.response.data.error);

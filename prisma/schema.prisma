@@ -79,7 +79,7 @@ model ProductOnSubCategory{
   id                Int       @id @default(autoincrement())
   product Product @relation(fields: [productId],references: [id],onDelete: Cascade)
   productId Int 
-  subcategory SubCategory @relation(fields: [subcategoryId],references: [id])
+  subcategory SubCategory @relation(fields: [subcategoryId],references: [id],onDelete: Cascade)
   subcategoryId Int 
 
   @@index([productId])
