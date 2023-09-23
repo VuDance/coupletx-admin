@@ -50,7 +50,9 @@ const Container: React.FC<ContainerProps> = ({
       productVariant: data
         ? data.productVariants
         : ([] as unknown as ProductVariantType[]),
-      subCategory: [],
+      subCategory: data
+        ? data.sub_category.map((item: any) => item.subcategory.name)
+        : [],
       active: data ? data.active : "Đang hoạt động",
     },
   });
@@ -77,9 +79,9 @@ const Container: React.FC<ContainerProps> = ({
     if (data.productVariant.length > 0) {
       let sum = 0;
       for (var i = 0; i < data.productVariant.length; i++) {
-        sum += parseFloat(data.productVariant[i].price);
+        sum += parseFloat(data.productVariant[i].quantity);
       }
-      if (sum > data.maxPrice) {
+      if (sum > parseFloat(data.quantity)) {
         toast.error("Số lượng biến thể lớn hơn tổng số lượng sản phẩm");
         return;
       }

@@ -8,7 +8,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       <Toaster />
 
       <Navbar />
-      <div className="flex justify-end pt-20 h-screen">{children}</div>
+      <div className="flex justify-end pt-20 min-h-screen">{children}</div>
     </div>
   );
 };

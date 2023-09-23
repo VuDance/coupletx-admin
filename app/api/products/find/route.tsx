@@ -4,18 +4,6 @@ import jwt from "jsonwebtoken";
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.headers.get("authorization");
-
-    const decodedToken: any = await jwt.verify(
-      token || "",
-      process.env.JWT_KEY!
-    );
-    if (decodedToken.role === false) {
-      return NextResponse.json(
-        { errorType: "Authorization", error: "UnAuthorization" },
-        { status: 401 }
-      );
-    }
     const query = request.nextUrl.searchParams.get("filter");
     if (query !== null) {
       const products = await prisma.product.findMany({
@@ -25,6 +13,7 @@ export async function GET(request: NextRequest) {
               images: true,
             },
           },
+          sub_category: true,
         },
         where: {
           product_name: {
@@ -43,6 +32,7 @@ export async function GET(request: NextRequest) {
               images: true,
             },
           },
+          sub_category: true,
         },
       });
       return NextResponse.json({
@@ -50,12 +40,6 @@ export async function GET(request: NextRequest) {
       });
     }
   } catch (error: any) {
-    if (error instanceof jwt.TokenExpiredError) {
-      return NextResponse.json({
-        errorType: "TokenExpired",
-        error: "Token has expired",
-      });
-    }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

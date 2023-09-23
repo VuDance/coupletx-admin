@@ -43,10 +43,13 @@ const ModalCreateCategory: React.FC<ModalCreateCategoryProps> = ({
   };
 
   const handleSubmitData = async (data: any) => {
+    console.log(data);
     if (
       data.image === "" ||
       data.gender === "" ||
-      (data.gender !== "Nam" && data.gender !== "Nữ") ||
+      (data.gender !== "Nam" &&
+        data.gender !== "Nữ" &&
+        data.gender != "Nam-Nữ") ||
       data.name === "" ||
       data.slug === ""
     ) {

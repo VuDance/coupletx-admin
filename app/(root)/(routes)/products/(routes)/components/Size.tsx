@@ -23,7 +23,7 @@ interface DataModalEditProps {
 }
 
 const Size: React.FC<SizeProps> = ({ color }) => {
-  const { getValues } = useFormContext();
+  const { getValues, setValue } = useFormContext();
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [dataModalEdit, setDataModalEdit] = useState<DataModalEditProps>({
@@ -40,6 +40,22 @@ const Size: React.FC<SizeProps> = ({ color }) => {
   };
   const handleCloseCreateSize = () => {
     setOpen(false);
+  };
+
+  const handleDelete = (name: string) => {
+    const filteredSizes = sizeList.size.filter(
+      (v: any) => v.name_size !== name
+    );
+    setValue(
+      "productVariant",
+      sizeList.size.filter((v: any) =>
+        v.color === color
+          ? {
+              filteredSizes,
+            }
+          : v
+      )
+    );
   };
 
   //handle edit modal
@@ -109,7 +125,7 @@ const Size: React.FC<SizeProps> = ({ color }) => {
                   >
                     Chỉnh sửa
                   </Button>
-                  <IconButton>
+                  <IconButton onClick={() => handleDelete(size.name_size)}>
                     <DeleteIcon color="error" />
                   </IconButton>
                 </TableCell>

@@ -7,18 +7,6 @@ export async function GET(
   { params }: { params: { productId: string } }
 ) {
   try {
-    const token = request.headers.get("authorization");
-
-    const decodedToken: any = await jwt.verify(
-      token || "",
-      process.env.JWT_KEY!
-    );
-    if (decodedToken.role === false) {
-      return NextResponse.json(
-        { errorType: "Authorization", error: "UnAuthorization" },
-        { status: 401 }
-      );
-    }
     const products = await prisma.product.findFirst({
       where: {
         id: parseInt(params.productId),
@@ -47,12 +35,6 @@ export async function GET(
 
     return NextResponse.json({ products: products });
   } catch (error: any) {
-    if (error instanceof jwt.TokenExpiredError) {
-      return NextResponse.json({
-        errorType: "TokenExpired",
-        error: "Token has expired",
-      });
-    }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

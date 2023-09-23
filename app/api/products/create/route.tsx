@@ -107,10 +107,15 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     if (error instanceof jwt.TokenExpiredError) {
-      return NextResponse.json({
-        errorType: "TokenExpired",
-        error: "Token has expired",
-      });
+      return NextResponse.json(
+        {
+          errorType: "TokenExpired",
+          error: "Token has expired",
+        },
+        {
+          status: 401,
+        }
+      );
     }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
