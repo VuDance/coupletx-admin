@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
           productVariants: {
             include: {
               images: true,
+              size: true,
             },
           },
           sub_category: true,
@@ -30,6 +31,7 @@ export async function GET(request: NextRequest) {
           productVariants: {
             include: {
               images: true,
+              size: true,
             },
           },
           sub_category: true,
