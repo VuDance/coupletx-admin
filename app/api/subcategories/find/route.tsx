@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
       },
       where: {
         AND: [
-          { slug: name },
+          { slug: { contains: name } },
           {
             products: {
               some: {
