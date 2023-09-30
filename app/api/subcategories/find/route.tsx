@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
                 product: {
                   productVariants: {
                     some: {
-                      color: { in: color },
+                      color: color.length > 0 ? { in: color } : undefined,
                     },
                   },
                 },
@@ -49,7 +49,10 @@ export async function GET(request: NextRequest) {
                 product: {
                   productVariants: {
                     some: {
-                      price: { gt: Math.min(...priceNumbers) },
+                      price:
+                        priceNumbers.length > 0
+                          ? { gt: Math.min(...priceNumbers) }
+                          : undefined,
                     },
                   },
                 },
@@ -64,7 +67,7 @@ export async function GET(request: NextRequest) {
                     some: {
                       size: {
                         some: {
-                          name_size: { in: size },
+                          name_size: size.length > 0 ? { in: size } : undefined,
                         },
                       },
                     },
