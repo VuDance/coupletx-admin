@@ -48,49 +48,62 @@ export async function GET(request: NextRequest) {
             products: {
               some: {
                 product: {
-                  productVariants: {
-                    some: {
-                      price: (() => {
-                        if (priceNumbers.length > 0) {
-                          if (priceNumbers.includes(1)) {
-                            return { lt: 300000 };
-                          } else if (priceNumbers.includes(2)) {
-                            return { gte: 300000, lte: 500000 };
-                          } else if (priceNumbers.includes(3)) {
-                            return { gt: 500000 };
-                          }
-                        } else {
-                          return {};
-                        }
-                      })(),
+                  minPrice: (() => {
+                    if (priceNumbers.length > 0) {
+                      if (priceNumbers.includes(1)) {
+                        return { lt: 300000 };
+                      } else if (priceNumbers.includes(2)) {
+                        return { gte: 300000, lte: 500000 };
+                      } else if (priceNumbers.includes(3)) {
+                        return { gt: 500000 };
+                      }
+                    } else {
+                      return {};
+                    }
+                  })(),
+                  // productVariants: {
+                  //   some: {
+                  //     price: (() => {
+                  //       if (priceNumbers.length > 0) {
+                  //         if (priceNumbers.includes(1)) {
+                  //           return { lt: 300000 };
+                  //         } else if (priceNumbers.includes(2)) {
+                  //           return { gte: 300000, lte: 500000 };
+                  //         } else if (priceNumbers.includes(3)) {
+                  //           return { gt: 500000 };
+                  //         }
+                  //       } else {
+                  //         return {};
+                  //       }
+                  //     })(),
 
-                      // OR: [
-                      //   {
-                      //     price:
-                      //       priceNumbers.length > 0 ? priceNumbers.includes(1)
-                      //         ? { lt: 300000 } ? priceNumbers.includes(2)
-                      //         : {},
-                      //   },
-                      //   {
-                      //     price:
-                      //       priceNumbers.length > 0 && priceNumbers.includes(2)
-                      //         ? {
-                      //             gte: 300000,
-                      //             lte: 500000,
-                      //           }
-                      //         : {},
-                      //   },
-                      //   {
-                      //     price:
-                      //       priceNumbers.length > 0 && priceNumbers.includes(3)
-                      //         ? {
-                      //             gt: 500000,
-                      //           }
-                      //         : {},
-                      //   },
-                      // ],
-                    },
-                  },
+                  //     // OR: [
+                  //     //   {
+                  //     //     price:
+                  //     //       priceNumbers.length > 0 ? priceNumbers.includes(1)
+                  //     //         ? { lt: 300000 } ? priceNumbers.includes(2)
+                  //     //         : {},
+                  //     //   },
+                  //     //   {
+                  //     //     price:
+                  //     //       priceNumbers.length > 0 && priceNumbers.includes(2)
+                  //     //         ? {
+                  //     //             gte: 300000,
+                  //     //             lte: 500000,
+                  //     //           }
+                  //     //         : {},
+                  //     //   },
+                  //     //   {
+                  //     //     price:
+                  //     //       priceNumbers.length > 0 && priceNumbers.includes(3)
+                  //     //         ? {
+                  //     //             gt: 500000,
+                  //     //           }
+                  //     //         : {},
+                  //     //   },
+                  //     // ],
+                  //   },
+                  // },
                 },
               },
             },
@@ -115,6 +128,27 @@ export async function GET(request: NextRequest) {
         ],
       },
     });
+    if (priceNumbers.length > 0) {
+      let filteredProducts = [];
+
+      for (let i = 0; i < listSub[0].products.length; i++) {
+        let products: any = listSub[0].products[i];
+        let minPrice = products.product.minPrice;
+
+        if (priceNumbers.includes(1) && minPrice < 300000) {
+          filteredProducts.push(products);
+        } else if (
+          priceNumbers.includes(2) &&
+          minPrice >= 300000 &&
+          minPrice <= 500000
+        ) {
+          filteredProducts.push(products);
+        } else if (priceNumbers.includes(3) && minPrice > 500000) {
+          filteredProducts.push(products);
+        }
+      }
+      listSub[0].products = filteredProducts;
+    }
     if (orderBy === "asc") {
       listSub[0].products.sort(
         (a, b) => a.product.minPrice - b.product.minPrice
