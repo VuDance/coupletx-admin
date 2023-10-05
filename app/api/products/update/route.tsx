@@ -77,13 +77,18 @@ export async function PUT(request: NextRequest) {
             product_variant_id: prdVariant.id,
           },
         });
-        for (var m = 0; m < productVariant[i].size[k].length; m++) {
+        for (
+          var m = 0;
+          m < productVariant[i].size[k].technical_specification.length;
+          m++
+        ) {
           await prisma.technicalSpecification.create({
             data: {
               name_technical_specification:
-                productVariant[i].size[k].name_technical_specification,
+                productVariant[i].size[k].technical_specification[m]
+                  .name_technical_specification,
               size_id: size.id,
-              value: productVariant[i].size[k].value,
+              value: productVariant[i].size[k].technical_specification[m].value,
             },
           });
         }
