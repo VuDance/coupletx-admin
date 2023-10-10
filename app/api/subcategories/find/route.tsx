@@ -61,49 +61,6 @@ export async function GET(request: NextRequest) {
                       return {};
                     }
                   })(),
-                  // productVariants: {
-                  //   some: {
-                  //     price: (() => {
-                  //       if (priceNumbers.length > 0) {
-                  //         if (priceNumbers.includes(1)) {
-                  //           return { lt: 300000 };
-                  //         } else if (priceNumbers.includes(2)) {
-                  //           return { gte: 300000, lte: 500000 };
-                  //         } else if (priceNumbers.includes(3)) {
-                  //           return { gt: 500000 };
-                  //         }
-                  //       } else {
-                  //         return {};
-                  //       }
-                  //     })(),
-
-                  //     // OR: [
-                  //     //   {
-                  //     //     price:
-                  //     //       priceNumbers.length > 0 ? priceNumbers.includes(1)
-                  //     //         ? { lt: 300000 } ? priceNumbers.includes(2)
-                  //     //         : {},
-                  //     //   },
-                  //     //   {
-                  //     //     price:
-                  //     //       priceNumbers.length > 0 && priceNumbers.includes(2)
-                  //     //         ? {
-                  //     //             gte: 300000,
-                  //     //             lte: 500000,
-                  //     //           }
-                  //     //         : {},
-                  //     //   },
-                  //     //   {
-                  //     //     price:
-                  //     //       priceNumbers.length > 0 && priceNumbers.includes(3)
-                  //     //         ? {
-                  //     //             gt: 500000,
-                  //     //           }
-                  //     //         : {},
-                  //     //   },
-                  //     // ],
-                  //   },
-                  // },
                 },
               },
             },
