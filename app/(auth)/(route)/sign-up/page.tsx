@@ -20,7 +20,7 @@ const Page = () => {
   const signUp = async (data: any) => {
     try {
       setLoading(true);
-      await axios.post("/api/user/register", data);
+      await axios.post("/api/auth/register", data);
       toast.success("Đăng kí thành công");
     } catch (error: any) {
       toast.error(error.response.data.message);

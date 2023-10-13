@@ -74,7 +74,7 @@ export const authOptions: AuthOptions = {
           { id: user.email, role: user.isAdmin },
           process.env.JWT_KEY!,
           {
-            expiresIn: "1h",
+            expiresIn: "1d",
           }
         );
         token.accessToken = accessToken;
