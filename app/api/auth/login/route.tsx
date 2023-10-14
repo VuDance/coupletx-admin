@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       },
       select: {
         id: true,       
-        username: true  
+        name: true  
       }
     });
 
