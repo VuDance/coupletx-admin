@@ -21,6 +21,10 @@ export async function POST(request: NextRequest) {
       where: {
         email: email,
       },
+      select: {
+        id: true,       
+        username: true  
+      }
     });
 
     if (!user || !user?.password) {
