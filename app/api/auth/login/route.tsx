@@ -21,10 +21,7 @@ export async function POST(request: NextRequest) {
       where: {
         email: email,
       },
-      select: {
-        id: true,       
-        name: true  
-      }
+      
     });
 
     if (!user || !user?.password) {
@@ -63,7 +60,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: "Đăng nhập thành công",
-        data:user,
+        data:{name:user.name, id:user.id},
       },
       { status: 200 }
     );
