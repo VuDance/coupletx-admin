@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
     const res: any = await signIn("credentials", {
       email,
       password,
-      redirect: false,
     });
     if (res?.status === 401) {
       return NextResponse.json(
