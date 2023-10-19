@@ -21,7 +21,9 @@ export async function POST(request: NextRequest) {
       where: {
         email: email,
       },
-      
+      include: {
+        carts: true,
+      },
     });
 
     if (!user || !user?.password) {
@@ -33,10 +35,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const isCorrectPassword = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
 
     if (!isCorrectPassword) {
       return NextResponse.json(
@@ -56,11 +55,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    
     return NextResponse.json(
       {
         message: "Đăng nhập thành công",
-        data:{name:user.name, id:user.id},
+        data: { user: { name: user.name, id: user.id }, cart: user.carts },
       },
       { status: 200 }
     );
