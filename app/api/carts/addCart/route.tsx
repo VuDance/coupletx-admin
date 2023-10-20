@@ -12,10 +12,18 @@ export async function POST(request: NextRequest) {
         user_id,
       },
       include: {
-        cart_item: true,
+        cart_item: {
+          include: {
+            product_variant: {
+              include: {
+                images: true,
+              },
+            },
+          },
+        },
       },
     });
-    if (existCart == undefined) {
+    if (!existCart) {
       const cart = await prisma.cart.create({
         data: {
           user_id,

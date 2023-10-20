@@ -11,6 +11,12 @@ export async function POST(request: NextRequest) {
     where: { email: email },
   });
   if (existedUser) {
+    const data = {
+      email,
+      userId: existedUser.id,
+      type: "VERIFY",
+    };
+    await sendEmail(data);
     return NextResponse.json(
       { message: "User already exists" },
       { status: 400 }

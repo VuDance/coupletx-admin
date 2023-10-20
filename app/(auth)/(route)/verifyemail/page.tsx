@@ -2,7 +2,7 @@ import React from "react";
 
 const page = async ({ searchParams }: any) => {
   const res = await fetch(
-    `${process.env.MY_URL}/api/user/verifyemail?token=${
+    `${process.env.MY_URL}/api/auth/verifyemail?token=${
       searchParams.token || ""
     }`,
     {

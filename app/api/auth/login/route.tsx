@@ -22,7 +22,15 @@ export async function POST(request: NextRequest) {
         email: email,
       },
       include: {
-        carts: true,
+        carts: {
+          include: {
+            cart_item: {
+              include: {
+                product_variant: true,
+              },
+            },
+          },
+        },
       },
     });
 

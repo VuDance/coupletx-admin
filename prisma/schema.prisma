@@ -213,6 +213,7 @@ model CartItem {
   total_price         Float
   cart_id             Int
   quantity            Int
+
   size String
   color String
 
